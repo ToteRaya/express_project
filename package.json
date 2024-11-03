@@ -1,0 +1,17 @@
+{
+  "name": "express_project",
+  "version": "1.0.0",
+  "description": "Projecto de Express login",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hector Arturo Raya Salmeron y Daniel Pineda Torres",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1"
+  }
+}
