@@ -11,3 +11,6 @@ const pool = mysql.createPool({
 
 pool.query = util.promisify(pool.query);
 module.exports = pool;
+
+//to import use: ------------------------------------>
+//const db = require('../database');
