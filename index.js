@@ -7,6 +7,8 @@ const morgan = require('morgan');
 app.use(morgan('dev'));
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); //Makes sure the json are actually readable
+const cors = require('./middleware/cors');
+app.use(cors);
 
 
 //ROUTES ----------------------------------------------------------------------

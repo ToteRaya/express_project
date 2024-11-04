@@ -6,10 +6,9 @@ const express = require('express');
 const user = express.Router();
 const db = require('../database');
 
-
 user.get("/",async(req,res,next) =>{ //SELECT --------------------------------------------------
     const results = await db.query("Select * from user");
-    console.log(results);
+    //console.log(results);
     if (results){
         return res.status(200).json(results);
     }else{
@@ -21,7 +20,7 @@ user.get("/:id([0-9]{1,3})",async(req,res,next) =>{ //SELECT w/Filter ID -------
     const id = req.params.id;
     const results = await db.query(`SELECT * FROM user WHERE id = ${id}`);
 
-    console.log(results);
+    //console.log(results);
     
     if (results.affectedRows != 0){
         return res.status(200).json(results);
@@ -34,7 +33,7 @@ user.get("/:name([A-Za-z]+)",async(req,res,next) =>{ //SELECT w/Filter NAME ----
     const name = req.params.name;
     const results = await db.query(`SELECT * FROM user WHERE name LIKE '${name}%'`);
 
-    console.log(results);
+    //console.log(results);
     
     if (results.affectedRows != 0){
         return res.status(200).json(results);
