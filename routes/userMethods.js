@@ -6,8 +6,8 @@ const express = require('express');
 const user = express.Router();
 const db = require('../database');
 
-//SELECT -------------------------------------------------------------------------------------
-user.get("/",async(req,res,next) =>{ 
+
+user.get("/",async(req,res,next) =>{ //SELECT --------------------------------------------------
     const results = await db.query("Select * from user");
     console.log(results);
     if (results){
@@ -15,7 +15,33 @@ user.get("/",async(req,res,next) =>{
     }else{
         return res.status(500).json({code:500, message: 'ERROR: Datos incompletos...'});
     }
-}); //SELECT W/FILTER 
+}); //SELECT 
+
+user.get("/:id([0-9]{1,3})",async(req,res,next) =>{ //SELECT w/Filter ID -------------------------------------
+    const id = req.params.id;
+    const results = await db.query(`SELECT * FROM user WHERE id = ${id}`);
+
+    console.log(results);
+    
+    if (results.affectedRows != 0){
+        return res.status(200).json(results);
+    }else{
+        return res.status(404).json({code:404, message: "404: Usuario no encontrado"});
+    }  
+}); //SELECT w/Filter
+
+user.get("/:name([A-Za-z]+)",async(req,res,next) =>{ //SELECT w/Filter NAME -------------------------------------
+    const name = req.params.name;
+    const results = await db.query(`SELECT * FROM user WHERE name LIKE '${name}%'`);
+
+    console.log(results);
+    
+    if (results.affectedRows != 0){
+        return res.status(200).json(results);
+    }else{
+        return res.status(404).json({code:404, message: "404: Usuario no encontrado"});
+    }  
+}); //SELECT w/Filter
 
 user.post("/",async(req,res,next) =>{ //INSERT -----------------------------------------------
     const {name, email, phone, address, pass} = req.body;
