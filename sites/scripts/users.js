@@ -8,9 +8,8 @@ function init(){
     });
 }
 
-// Function triggered when the form is submitted
 function searchUser(event) {
-    event.preventDefault(); // Prevent form from submitting and reloading the page
+    event.preventDefault(); 
     getData().then(userData => {
         displayData(userData);
     });
@@ -18,12 +17,11 @@ function searchUser(event) {
 
 function displayData(data) {
     const tableBody = document.getElementById('userbase').getElementsByTagName('tbody')[0];
-    tableBody.innerHTML = ""; // Clear existing rows
+    tableBody.innerHTML = ""; 
 
     data.forEach(user => {
         const row = document.createElement('tr');
 
-        // Populate each cell in the row with user data
         const idCell = document.createElement('td');
         idCell.textContent = user.id;
         row.appendChild(idCell);
@@ -48,6 +46,22 @@ function displayData(data) {
         passwordCell.textContent = user.pass;
         row.appendChild(passwordCell);
 
+        const deleteButtonCell = document.createElement('td');
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "delete-button"; //Clase delete-button
+        deleteButton.onclick = () => deleteUser(user.id);
+        deleteButtonCell.appendChild(deleteButton);
+        row.appendChild(deleteButtonCell);
+
+        const editButtonCell = document.createElement('td');
+        const editButton = document.createElement('button');
+        editButton.textContent = "Edit";
+        editButton.className = "edit-button"; //Clase edit-button
+        editButton.onclick = () => editUser(user.id); 
+        editButtonCell.appendChild(editButton);
+        row.appendChild(editButtonCell);
+
         tableBody.appendChild(row); // Append the row to the table body
     });
 }
@@ -64,4 +78,26 @@ async function getData(){
         console.log(err);
         return [];
     }
+}
+
+async function deleteUser(deleteId){
+    popup = confirm(`Do you want to delete user with id: ${deleteId}`)? true: false;
+    if (popup){
+        try {
+            const link = `${url}/user/${deleteId}`;
+            const res = await axios.delete(link, headers);
+            console.log(res);
+            alert("User deleted!");
+            window.location.reload();
+        } catch (err) {
+            alert("User not deleted:" + err);
+        }
+    }else{
+        alert("User not deleted");
+    }
+}
+
+function editUser(editId){
+    localStorage.setItem("savedId", editId);
+    window.location.href = 'edit.html';  
 }

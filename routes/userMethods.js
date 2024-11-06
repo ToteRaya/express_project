@@ -6,7 +6,7 @@ const express = require('express');
 const user = express.Router();
 const db = require('../database');
 
-user.get("/",async(req,res,next) =>{ //SELECT --------------------------------------------------
+user.get("/",async(req,res,next) =>{ 
     const results = await db.query("Select * from user");
     //console.log(results);
     if (results){
@@ -16,7 +16,7 @@ user.get("/",async(req,res,next) =>{ //SELECT ----------------------------------
     }
 }); //SELECT 
 
-user.get("/:id([0-9]{1,3})",async(req,res,next) =>{ //SELECT w/Filter ID -------------------------------------
+user.get("/:id([0-9]{1,3})",async(req,res,next) =>{ 
     const id = req.params.id;
     const results = await db.query(`SELECT * FROM user WHERE id = ${id}`);
 
@@ -29,7 +29,7 @@ user.get("/:id([0-9]{1,3})",async(req,res,next) =>{ //SELECT w/Filter ID -------
     }  
 }); //SELECT w/Filter
 
-user.get("/:name([A-Za-z]+)",async(req,res,next) =>{ //SELECT w/Filter NAME -------------------------------------
+user.get("/:name([A-Za-z]+)",async(req,res,next) =>{
     const name = req.params.name;
     const results = await db.query(`SELECT * FROM user WHERE name LIKE '${name}%'`);
 
@@ -42,7 +42,7 @@ user.get("/:name([A-Za-z]+)",async(req,res,next) =>{ //SELECT w/Filter NAME ----
     }  
 }); //SELECT w/Filter
 
-user.post("/",async(req,res,next) =>{ //INSERT -----------------------------------------------
+user.post("/",async(req,res,next) =>{
     const {name, email, phone, address, pass} = req.body;
     // console.log({name});
 
@@ -62,10 +62,10 @@ user.post("/",async(req,res,next) =>{ //INSERT ---------------------------------
     }else{
         return res.status(500).json({code:500, message: 'ERROR: Datos incompletos...'});
     }
-}); 
+}); //INSERT
 
-user.delete("/",async(req,res,next) =>{ //DELETE -----------------------------------------------
-    const {id} = req.body;
+user.delete("/:id([0-9]{1,3})",async(req,res,next) =>{ 
+    const { id } = req.params;
     console.log("Delete: "+ {id});
 
     if (id){ //Checa que si los elementos estan dentro del body
@@ -85,23 +85,22 @@ user.delete("/",async(req,res,next) =>{ //DELETE -------------------------------
     }
 }); //DELETE
 
-user.put("/",async(req,res,next) =>{ //UPDATE -----------------------------------------------
+user.put("/",async(req,res,next) =>{
     const {id, name, email, phone, address, pass} = req.body;
-    console.log("Edit:" + {id});
+    //console.log("Edit:" + {id});
 
     if (id && name && email && phone && address && pass){ //Checa que si los elementos estan dentro del body
-        let sql =  `UPDATE user SET`; 
-        sql += `name ='${name}',`;
-        sql += `email ='${email}',`;
-        sql += `phone ='${phone}',`;
-        sql += `address ='${address}',`;
-        sql += `pass ='${pass}',`;
-
-        sql += `WHERE id = ${id}`
+        let sql = `UPDATE user SET `; // Add space after SET
+        sql += `name ='${name}', `;
+        sql += `email ='${email}', `;
+        sql += `phone ='${phone}', `;
+        sql += `address ='${address}', `;
+        sql += `pass ='${pass}' `;
+        sql += `WHERE id = ${id}`;
 
         //Llega a hacer el query e lo imprime en la consola
         const rows = await db.query(sql); 
-        console.log(rows);
+        //console.log(rows);
 
         if (rows.affectedRows > 0){
             return res.status(201).json({code:201, message: `Usuario editado: ${id}`});
