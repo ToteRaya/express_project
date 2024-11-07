@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users</title>
+    <title>User</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="scripts/users.js"></script>
 </head>
@@ -22,11 +22,18 @@
             <th>Phone</th>
             <th>Address</th>
             <th>Password</th>
-        </tr></thead>
-        <tbody>
-
-        </tbody>
-
+        </tr>
+        <tr>
+            <td> </td>
+            <td><input type="text" name="name" id="insertName"></td>
+            <td><input type="text" name="email" id="insertEmail"></td>
+            <td><input type="text" name="phone" id="insertPhone"></td>
+            <td><input type="text" name="address" id="insertAddress"></td>
+            <td><input type="text" name="password" id="insertPassword"></td>
+            <td colspan="2"><input type="button" value="Insert" style="width:100%;" onclick="insertUser()"></td>
+        </tr>
+        </thead>
+        <tbody></tbody>
     </table>
 </body>
 </html>

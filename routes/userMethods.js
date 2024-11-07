@@ -52,7 +52,7 @@ user.post("/",async(req,res,next) =>{
 
         //Llega a hacer el query e lo imprime en la consola
         const rows = await db.query(sql); 
-        console.log(rows);
+        //console.log(rows);
 
         if (rows.affectedRows > 0){
             return res.status(201).json({code:201, message: `Nuevo usuario: ${name}`});

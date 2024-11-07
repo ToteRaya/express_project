@@ -3,7 +3,17 @@ var headers = {};
 var url = "http://localhost:3000";
 
 function init(){
-    loadUser();
+    if (localStorage.getItem("token")){
+        token = localStorage.getItem("token");
+        headers = {
+            headers: {
+                'Authorization': "bearer " + localStorage.getItem("token")
+            }
+        }
+        loadUser();
+    }else{
+        window.location.href = "index.html";
+    }    
 }
 
 async function loadUser(){
@@ -28,7 +38,7 @@ async function loadUser(){
 }
 
 async function submitEdit(){
-    if (checkInput()){
+    if (checkInput() && emailPhone()) {
         try {
             const response = await axios.put(`${url}/user/`, {
                 id: localStorage.getItem("savedId"),
@@ -37,25 +47,45 @@ async function submitEdit(){
                 phone: document.getElementById("userPhone").value,
                 address: document.getElementById("userAddress").value,
                 pass: document.getElementById("userPassword").value
-              });
-            console.log(response)
-            alert("User updated!")
+            }, headers); // Include headers for authorization
+            console.log(response);
+            alert("User updated!");
         } catch (err) {
             console.error("Error updating user:", err);
         }
         localStorage.removeItem("savedId");
         window.location.href = 'users.html';   
-    }else{
-        alert("Please fill out all of the forms!")
     }
 }
 
-function checkInput() {
+function checkInput() {//Checa si todos los valores estan llenados
     const name = document.getElementById("userName").value.trim();
     const email = document.getElementById("userEmail").value.trim();
     const phone = document.getElementById("userPhone").value.trim();
     const address = document.getElementById("userAddress").value.trim();
     const password = document.getElementById("userPassword").value.trim();
 
-    return (name && email && phone && address && password);
+    const returnvalue = (name && email && phone && address && password);
+    if (!returnvalue){
+        alert("Please fill out the form completely");
+    }
+    return returnvalue;
+}
+
+function emailPhone(){//Checa si el correo y telefono tienen sus respectivos formatos
+    const email = document.getElementById("userEmail").value;
+    const phone = document.getElementById("userPhone").value;
+
+    // Regex
+    const emailPattern = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
+    const phonePattern = /^\d+$/;
+
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return false;
+    }else if (!phonePattern.test(phone)) {
+        alert("Please enter a valid phone number with digits only.");
+        return false;
+    }
+    return true;   
 }

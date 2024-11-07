@@ -3,9 +3,19 @@ var headers = {};
 var url = "http://localhost:3000";
 
 function init(){
-    getData().then(userData => {
-        displayData(userData);
-    });
+    if (localStorage.getItem("token")){
+        token = localStorage.getItem("token");
+        headers = {
+            headers: {
+                'Authorization': "bearer " + localStorage.getItem("token")
+            }
+        }
+        getData().then(userData => {
+            displayData(userData);
+        });
+    }else{
+        window.location.href = "index.html";
+    }    
 }
 
 function searchUser(event) {
@@ -81,18 +91,18 @@ async function getData(){
 }
 
 async function deleteUser(deleteId){
-    popup = confirm(`Do you want to delete user with id: ${deleteId}`)? true: false;
-    if (popup){
+    const confirmDelete = confirm(`Do you want to delete user with id: ${deleteId}`) ? true : false;
+    if (confirmDelete){
         try {
             const link = `${url}/user/${deleteId}`;
-            const res = await axios.delete(link, headers);
+            const res = await axios.delete(link, headers); 
             console.log(res);
             alert("User deleted!");
             window.location.reload();
         } catch (err) {
-            alert("User not deleted:" + err);
+            alert("User not deleted: " + err);
         }
-    }else{
+    } else {
         alert("User not deleted");
     }
 }
@@ -100,4 +110,54 @@ async function deleteUser(deleteId){
 function editUser(editId){
     localStorage.setItem("savedId", editId);
     window.location.href = 'edit.html';  
+}
+
+async function insertUser(){
+    if(checkInput() && emailPhone()){
+        try {
+            const response = await axios.post(`${url}/user/`, {
+                name: document.getElementById("insertName").value,
+                email: document.getElementById("insertEmail").value,
+                phone: document.getElementById("insertPhone").value,
+                address: document.getElementById("insertAddress").value,
+                pass: document.getElementById("insertPassword").value
+            }, headers); // Passing headers here
+            alert("User inserted!");
+            window.location.reload();
+        } catch (err) {
+            alert("ERROR: " + err);
+        }
+    }
+}
+
+function checkInput() {//Checa si todos los valores estan llenados
+    const name = document.getElementById("insertName").value.trim();
+    const email = document.getElementById("insertEmail").value.trim();
+    const phone = document.getElementById("insertPhone").value.trim();
+    const address = document.getElementById("insertAddress").value.trim();
+    const password = document.getElementById("insertPassword").value.trim();
+
+    const returnvalue = (name && email && phone && address && password);
+    if (!returnvalue){
+        alert("Please fill out the form completely");
+    }
+    return returnvalue;
+}
+
+function emailPhone(){//Checa si el correo y telefono tienen sus respectivos formatos
+    const email = document.getElementById("insertEmail").value;
+    const phone = document.getElementById("insertPhone").value;
+
+    // Regex
+    const emailPattern = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
+    const phonePattern = /^\d+$/;
+
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return false;
+    }else if (!phonePattern.test(phone)) {
+        alert("Please enter a valid phone number with digits only.");
+        return false;
+    }
+    return true;   
 }
