@@ -3,37 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User</title>
+    <title>User Data</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="scripts/users.js"></script>
+    <link rel="stylesheet" href="user.css">
 </head>
 <body>
-    <span>Search: 
-        <form onsubmit="searchUser(event)"> 
-            <input type="text" name="search" id="search">
-        </form>
-    </span>
-    
-    <table id="userbase" border="1">
-        <thead><tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Password</th>
-        </tr>
-        <tr>
-            <td> </td>
-            <td><input type="text" name="name" id="insertName"></td>
-            <td><input type="text" name="email" id="insertEmail"></td>
-            <td><input type="text" name="phone" id="insertPhone"></td>
-            <td><input type="text" name="address" id="insertAddress"></td>
-            <td><input type="text" name="password" id="insertPassword"></td>
-            <td colspan="2"><input type="button" value="Insert" style="width:100%;" onclick="insertUser()"></td>
-        </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div class="container">
+        <h2>User Data</h2>
+        <div class="search-bar">
+            <label for="search">Search:</label>
+            <form onsubmit="searchUser(event)"> 
+                <input type="text" name="search" id="search" placeholder="Search by name or ID">
+            </form>
+        </div>
+        
+        <table id="userbase" class="user-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Password</th>
+                    <th>Actions</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="text" name="name" id="insertName" placeholder="Name"></td>
+                    <td><input type="text" name="email" id="insertEmail" placeholder="Email"></td>
+                    <td><input type="text" name="phone" id="insertPhone" placeholder="Phone"></td>
+                    <td><input type="text" name="address" id="insertAddress" placeholder="Address"></td>
+                    <td><input type="text" name="password" id="insertPassword" placeholder="Password"></td>
+                    <td><button onclick="insertUser()" class="insert-button">Insert</button></td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 </body>
 </html>
