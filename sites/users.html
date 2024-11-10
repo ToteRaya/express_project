@@ -6,10 +6,12 @@
     <title>User Data</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="scripts/users.js"></script>
-    <link rel="stylesheet" href="user.css">
+    <link rel="stylesheet" href="style/user.css">
 </head>
 <body>
     <div class="container">
+
+
         <h2>User Data</h2>
         <div class="search-bar">
             <label for="search">Search:</label>
@@ -17,6 +19,16 @@
                 <input type="text" name="search" id="search" placeholder="Search by name or ID">
             </form>
         </div>
+
+        <button onclick="exit()" class="login-button">Go to Login</button>
+
+<script>
+  function handleLoginClick() {
+    localStorage.removeItem('token');  // Remove 'token' from local storage
+    window.location.href = 'login.html';  // Redirect to login page
+  }
+</script>
+
         
         <table id="userbase" class="user-table">
             <thead>
@@ -27,7 +39,7 @@
                     <th>Phone</th>
                     <th>Address</th>
                     <th>Password</th>
-                    <th>Actions</th>
+                    <th colspan="2">Actions</th>
                 </tr>
                 <tr>
                     <td></td>
@@ -36,7 +48,7 @@
                     <td><input type="text" name="phone" id="insertPhone" placeholder="Phone"></td>
                     <td><input type="text" name="address" id="insertAddress" placeholder="Address"></td>
                     <td><input type="text" name="password" id="insertPassword" placeholder="Password"></td>
-                    <td><button onclick="insertUser()" class="insert-button">Insert</button></td>
+                    <td colspan="2"><button onclick="insertUser()" class="insert-button" style="width:100%">Insert</button></td>
                 </tr>
             </thead>
             <tbody></tbody>

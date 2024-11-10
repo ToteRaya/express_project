@@ -11,3 +11,8 @@ module.exports = (req, res, next) => {
     }
     next();
 }
+
+// Cosa para que los requests puedan acceder 
+// a los headers
+
+// No olvidar poner lo en el index.js

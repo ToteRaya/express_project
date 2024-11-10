@@ -27,11 +27,14 @@ user.get("/:id([0-9]{1,3})",async(req,res,next) =>{
     }else{
         return res.status(404).json({code:404, message: "404: Usuario no encontrado"});
     }  
-}); //SELECT w/Filter
+}); //SELECT w/Filter id
 
 user.get("/:name([A-Za-z]+)",async(req,res,next) =>{
     const name = req.params.name;
     const results = await db.query(`SELECT * FROM user WHERE name LIKE '${name}%'`);
+    // The like function enables us to search name with the beginning of the 
+    // given string. So if we search Ma in the parameters, it returns the names all
+    // the names starting with Ma; such as Makima, Mario, Maria Robotnik, etc.
 
     //console.log(results);
     
@@ -40,20 +43,22 @@ user.get("/:name([A-Za-z]+)",async(req,res,next) =>{
     }else{
         return res.status(404).json({code:404, message: "404: Usuario no encontrado"});
     }  
-}); //SELECT w/Filter
+}); //SELECT w/Filter name
 
 user.post("/",async(req,res,next) =>{
     const {name, email, phone, address, pass} = req.body;
     // console.log({name});
-
-    if (name && email && phone && address && pass){ //Checa que si los elementos estan dentro del body
+    
+    //Checa que si los elementos estan dentro del body
+    if (name && email && phone && address && pass){ 
         let sql = `INSERT INTO user(name, email, phone, address, pass) `
         sql += `VALUES ('${name}','${email}','${phone}','${address}','${pass}');`
 
-        //Llega a hacer el query e lo imprime en la consola
+        //Llega a hacer el query y lo imprime en la consola
         const rows = await db.query(sql); 
         //console.log(rows);
 
+        //Checa si hay algun cambio en el primer lugar
         if (rows.affectedRows > 0){
             return res.status(201).json({code:201, message: `Nuevo usuario: ${name}`});
         }else{
@@ -66,15 +71,16 @@ user.post("/",async(req,res,next) =>{
 
 user.delete("/:id([0-9]{1,3})",async(req,res,next) =>{ 
     const { id } = req.params;
-    console.log("Delete: "+ {id});
+    //console.log("Delete: "+ {id});
 
     if (id){ //Checa que si los elementos estan dentro del body
         const sql = `DELETE FROM user WHERE id = ${id}`;
 
-        //Llega a hacer el query e lo imprime en la consola
+        //Llega a hacer el query y lo imprime en la consola
         const rows = await db.query(sql); 
-        console.log(rows);
+        //console.log(rows);
 
+        //Checa si algun cambio
         if (rows.affectedRows > 0){
             return res.status(201).json({code:201, message: `Usuario eliminado: ${id}`});
         }else{
@@ -89,7 +95,8 @@ user.put("/",async(req,res,next) =>{
     const {id, name, email, phone, address, pass} = req.body;
     //console.log("Edit:" + {id});
 
-    if (id && name && email && phone && address && pass){ //Checa que si los elementos estan dentro del body
+     //Checa si estan todos los elementos ya que para realizar el put necesita todos los parametros
+    if (id && name && email && phone && address && pass){
         let sql = `UPDATE user SET `; // Add space after SET
         sql += `name ='${name}', `;
         sql += `email ='${email}', `;
@@ -98,7 +105,7 @@ user.put("/",async(req,res,next) =>{
         sql += `pass ='${pass}' `;
         sql += `WHERE id = ${id}`;
 
-        //Llega a hacer el query e lo imprime en la consola
+        //Llega a hacer el query y lo imprime en la consola
         const rows = await db.query(sql); 
         //console.log(rows);
 
